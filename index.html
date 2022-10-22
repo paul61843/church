@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>church sign in system</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script src="https://unpkg.com/vue@3.2.41/dist/vue.global.js"></script>
+
+<script setup>
+    const { createApp } = Vue;
+
+    const init = {
+        data() {
+            return {
+                name: '',
+                time: '',
+                baseUrl: 'https://data.mongodb-api.com/app/data-ybwtl/endpoint/data/v1',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Request-Headers": "*",
+                    "api-key": "lW050ldNtvMHO0xqzumxyTscgoHviynOVDbsrdd0CC4xaSvJUsiY8a2CWRkehKRV",
+                }
+            }
+        },
+        async created() {
+            const id = this.getUrlParam('id');
+            this.name = await this.findMember(id);
+            this.signin();
+        },
+        methods: {
+            getUrlParam(paramName) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(paramName) || '';
+            },
+            async signin() {
+                const confirmResult = confirm(`${this.name} 是否要打卡`)
+                this.time = new Date();
+                if (confirmResult) {
+                    alert(`${this.name} 打卡成功 ${this.time.toISOString().split('T')[0]}`)
+                }
+            },
+            async findMember(id) {
+                const url = `${this.baseUrl}/action/findOne`
+                const body = {
+                    "collection":"member",
+                    "database":"church",
+                    "dataSource":"Cluster0",
+                    "filter": {"id": "63540ac1655a371b330f11a7"}
+                }
+                const memberData = await fetch(url, {
+                    method: "POST",
+                    headers: this.headers,
+                    body: JSON.stringify(body)
+                })
+
+                return memberData.json().name;
+            },
+            addSigninRecord(id) {
+                const url = `${baseUrl}/action/findOne`
+                const body = {
+                    "collection":"2022-singin",
+                    "database":"church",
+                    "dataSource":"Cluster0",
+                    "filter": {"id": "63540ac1655a371b330f11a7"}
+                }
+                fetch(url, {
+                    method: "POST",
+                    headers: this.headers,
+                    body: JSON.stringify(body)
+                })
+                .then(response => response.json())
+                .then(json => console.log(json));
+            }
+
+        },
+    }
+
+  createApp(init).mount('#app')
+</script>
+</html>
