@@ -9,12 +9,10 @@ mongoose
     .then(() => console.log('Database is connected.'))
     .catch(err => console.log(err));
 
-const Church = mongoose.model('church', { name: String } )
-const kitty = new Church({ name: 'Zildjian' });
-kitty.save().then(() => console.log('meow'));
-
 app.get("/", (req, res) => {
-  console.log('find');
+  const Church = mongoose.model('church', { name: String } )
+  const kitty = new Church({ name: 'Zildjian' });
+  kitty.save().then(() => console.log('meow'));
   res.send("hello world!");
 });
 
