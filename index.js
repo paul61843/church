@@ -13,10 +13,11 @@ mongoose
     .then(() => console.log('Database is connected.'))
     .catch(err => console.log(err));
 
+    const Church = mongoose.model('member', { name: String } )
+    const kitty = new Church({ name: 'Zildjian' });
+    kitty.save().then(() => console.log('meow'));
+
 app.get("/", (req, res) => {
-  const Church = mongoose.model('member', { name: String } )
-  const kitty = new Church({ name: 'Zildjian' });
-  kitty.save().then(() => console.log('meow'));
   res.send("hello world!");
 });
 
@@ -26,6 +27,12 @@ app.get("/find", async (req, res) => {
     const memberData = await findMemberData('id');
     console.log(memberData)
     res.json(memberData);
+});
+
+app.get("/mongoose", (req, res) => {
+  const Church = mongoose.model('member', { name: String } )
+  const kitty = new Church({ name: 'Zildjian' });
+  kitty.save().then(() => console.log('meow'));
 });
 
 async function findMemberData(id) {
