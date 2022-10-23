@@ -9,6 +9,7 @@ app.get("/", (req, res) => {
 
 app.get("/find", async (req, res) => {
     const memberData = await findMemberData('id');
+    console.log(memberData)
     res.json(memberData);
 });
 
